@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100..900;1,100..900&family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; }
   html, body {
@@ -28,52 +28,58 @@
   /* nav */
   .topnav {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 16px;
+    left: 24px;
+    right: 24px;
+    margin: 0 auto;
     z-index: 10;
-    height: 60px;
+    width: calc(100% - 48px);
+    max-width: 900px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 32px;
-    background: rgba(89, 73, 54, 0.7);
+    padding: 8px;
+    background: rgba(208, 203, 182, 0.7);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    border-radius: 999px;
   }
 
   .nav-logo {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-family: "Space Mono", ui-monospace, monospace;
+    margin-left: 5px;
+    font-family: "Geist", sans-serif;
     font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.12em;
-    color: #F4DEA9;
+    color: #000;
     white-space: nowrap;
   }
 
   .nav-links {
     display: flex;
-    gap: 32px;
+    gap: 28px;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
   }
 
   .nav-links a {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #fff;
+    font-family: "Geist", sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #5B4425;
     text-decoration: none;
     transition: color 0.2s;
   }
-  .nav-links a:hover { color: #F4DEA9; }
+  .nav-links a:hover { color: #000; }
 
   .nav-cta {
-    font-family: "Space Mono", ui-monospace, monospace;
+    font-family: "Geist", sans-serif;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -83,11 +89,71 @@
     padding: 9px 22px;
     border-radius: 999px;
     white-space: nowrap;
-    background: #F4DEA9;
-    color: #5B4425;
+    background: #5B4425;
+    color: #F4DEA9;
     transition: opacity 0.2s;
   }
   .nav-cta:hover { opacity: 0.8; }
+
+  /* hamburger */
+  .nav-burger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .nav-burger span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: #000;
+    border-radius: 2px;
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .nav-burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-burger.open span:nth-child(2) { opacity: 0; }
+  .nav-burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* mobile dropdown */
+  .nav-mobile-menu {
+    display: none;
+    position: fixed;
+    top: 72px;
+    left: 24px;
+    right: 24px;
+    margin: 0 auto;
+    width: calc(100% - 48px);
+    max-width: 900px;
+    background: rgba(208, 203, 182, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 16px 24px;
+    flex-direction: column;
+    gap: 16px;
+    z-index: 9;
+  }
+  .nav-mobile-menu.open { display: flex; }
+  .nav-mobile-menu a {
+    font-family: "Geist", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #5B4425;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-mobile-menu a:hover { color: #000; }
+
+  @media (max-width: 700px) {
+    .nav-links, .nav-cta { display: none; }
+    .nav-burger { display: flex; }
+  }
 
   /* hero blur — 80 % of viewport height */
   .bg-blur {
@@ -152,7 +218,7 @@
   }
 
   .cta-row button {
-    font-family: "Space Mono", ui-monospace, monospace;
+    font-family: "Geist", sans-serif;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 0.12em;
@@ -168,6 +234,33 @@
 
   .cta-primary  { background: #5B4425; color: #F4DEA9; }
   .cta-secondary { background: #F4DEA9; color: #5B4425; }
+
+  .calm-down {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0px;
+    cursor: pointer;
+    color: #5B4425;
+    opacity: 0.3;
+    transition: opacity 0.4s;
+    user-select: none;
+    border: none;
+    background: none;
+    padding: 0;
+  }
+
+  .calm-down-text {
+    font-family: "Geist", sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    white-space: nowrap;
+  }
 </style>
 </head>
 <body>
@@ -184,9 +277,20 @@
     <a href="#">Solution</a>
     <a href="#">Our DB</a>
     <a href="#">For Influencers</a>
+    <a href="#">Docs</a>
   </div>
   <button class="nav-cta">Start Bot</button>
+  <button class="nav-burger" id="nav-burger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<div class="nav-mobile-menu" id="nav-mobile-menu">
+  <a href="#">Solution</a>
+  <a href="#">Our DB</a>
+  <a href="#">For Influencers</a>
+  <a href="#">Docs</a>
+</div>
 
 <div class="card">
   <h1 id="headline">Crypto is a mess.<br><span style="color:#5B4425">Use a correct lens.</span></h1>
@@ -195,6 +299,11 @@
     <button class="cta-primary">Start for Free</button>
     <button class="cta-secondary">Follow Updates</button>
   </div>
+
+  <button class="calm-down" id="calm-down">
+    <img src="/hero_lion.png" height="48" alt="lion" />
+    <span class="calm-down-text">CLICK TO CALM DOWN</span>
+  </button>
 </div>
 
 <script>
@@ -204,6 +313,21 @@
     sub.style.maxWidth = h1.offsetWidth + 'px';
   });
   ro.observe(h1);
+
+  const burger = document.getElementById('nav-burger');
+  const mobileMenu = document.getElementById('nav-mobile-menu');
+  burger.addEventListener('click', () => {
+    burger.classList.toggle('open');
+    mobileMenu.classList.toggle('open');
+  });
+
+  const calmDown = document.getElementById('calm-down');
+  let calmTimer;
+  calmDown.addEventListener('click', () => {
+    calmDown.style.opacity = '0.55';
+    clearTimeout(calmTimer);
+    calmTimer = setTimeout(() => { calmDown.style.opacity = '0.3'; }, 3000);
+  });
 </script>
 
 <script type="module" src="/src/main.ts"></script>
