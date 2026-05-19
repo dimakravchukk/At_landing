@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Stellar Vortex</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #07050d;
+    overflow: hidden;
+  }
+  canvas#stage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80vh;
+    display: block;
+    touch-action: none;
+  }
+
+  /* nav */
+  .topnav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    background: rgba(89, 73, 54, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: #F4DEA9;
+    white-space: nowrap;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .nav-links a {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: #F4DEA9; }
+
+  .nav-cta {
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    padding: 9px 22px;
+    border-radius: 999px;
+    white-space: nowrap;
+    background: #F4DEA9;
+    color: #5B4425;
+    transition: opacity 0.2s;
+  }
+  .nav-cta:hover { opacity: 0.8; }
+
+  /* hero blur — 80 % of viewport height */
+  .bg-blur {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80vh;
+    z-index: 1;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    pointer-events: none;
+  }
+
+  /* hero card — 80 % of viewport height */
+  .card {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80vh;
+    z-index: 2;
+    background: radial-gradient(ellipse at center,
+      rgba(255, 255, 255, 0.65) 0%,
+      rgba(255, 255, 255, 0.0) 100%
+    );
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    text-align: center;
+  }
+
+  .card h1 {
+    margin: 0;
+    color: #000;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 39px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+
+  .card .subhead {
+    margin: 0;
+    color: rgba(0, 0, 0, 0.65);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.6;
+    /* max-width set dynamically to match h1 pixel width */
+  }
+
+  .cta-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+  }
+
+  .cta-row button {
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    padding: 9px 22px;
+    border-radius: 999px;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+  }
+  .cta-row button:hover { opacity: 0.8; }
+
+  .cta-primary  { background: #5B4425; color: #F4DEA9; }
+  .cta-secondary { background: #F4DEA9; color: #5B4425; }
+</style>
+</head>
+<body>
+
+<canvas id="stage" aria-label="Stellar vortex background"></canvas>
+<div class="bg-blur"></div>
+
+<nav class="topnav">
+  <span class="nav-logo">
+    <img src="/at_logo_svg.svg" width="28" height="28" alt="" />
+    ALPHA TRACK
+  </span>
+  <div class="nav-links">
+    <a href="#">Solution</a>
+    <a href="#">Our DB</a>
+    <a href="#">For Influencers</a>
+  </div>
+  <button class="nav-cta">Start Bot</button>
+</nav>
+
+<div class="card">
+  <h1 id="headline">Crypto is a mess.<br><span style="color:#5B4425">Use a correct lens.</span></h1>
+  <p class="subhead" id="subhead">AI reads thousands of crypto channels so you don't have to.</p>
+  <div class="cta-row">
+    <button class="cta-primary">Start for Free</button>
+    <button class="cta-secondary">Follow Updates</button>
+  </div>
+</div>
+
+<script>
+  const h1 = document.getElementById('headline');
+  const sub = document.getElementById('subhead');
+  const ro = new ResizeObserver(() => {
+    sub.style.maxWidth = h1.offsetWidth + 'px';
+  });
+  ro.observe(h1);
+</script>
+
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

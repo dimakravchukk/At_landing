@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Stellar Vortex — Wallpaper 04</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #ffe7c4;
+    --ink-dim: rgba(255,231,196,0.55);
+    --ink-faint: rgba(255,231,196,0.28);
+    --rule: rgba(255,231,196,0.10);
+    --bg: #07050d;
+    --accent: #ffb347;           /* amber */
+    --accent-cool: #7c5cff;      /* indigo, used for low-fps reference */
+    --warn: #ffd166;
+    --bad: #ff6b6b;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  canvas#stage {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 0;
+    touch-action: none;
+  }
+
+  /* ───────── HUD chrome ───────── */
+  .hud {
+    position: fixed;
+    z-index: 2;
+    pointer-events: none;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+  }
+
+  .id { top: 18px; left: 18px; display: flex; flex-direction: column; gap: 2px; }
+  .id .tag {
+    color: var(--ink-faint);
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+  }
+  .id .name {
+    color: var(--ink);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    font-weight: 500;
+  }
+  .id .subtitle {
+    color: var(--ink-dim);
+    font-size: 10.5px;
+  }
+
+  .fps {
+    top: 18px;
+    right: 18px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    align-items: flex-end;
+  }
+  .fps .num {
+    font-variant-numeric: tabular-nums;
+    font-size: 26px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--accent);
+    font-weight: 500;
+    transition: color 0.4s;
+  }
+  .fps[data-band="mid"] .num { color: var(--warn); }
+  .fps[data-band="low"] .num { color: var(--bad); }
+  .fps .label {
+    color: var(--ink-faint);
+    font-size: 9.5px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .fps .meta {
+    color: var(--ink-faint);
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+
+  .math {
+    left: 18px;
+    bottom: 18px;
+    max-width: 380px;
+    padding: 14px 16px 13px;
+    background: #000;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    pointer-events: auto;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  /* trivial monochrome mesh-gradient drift — cursor-independent, lives behind text */
+  .math::before {
+    content: "";
+    position: absolute;
+    inset: -40%;
+    background:
+      radial-gradient(38% 38% at 22% 28%, rgba(255,255,255,0.075), transparent 70%),
+      radial-gradient(34% 34% at 78% 72%, rgba(255,255,255,0.055), transparent 70%),
+      radial-gradient(46% 46% at 50% 110%, rgba(255,255,255,0.045), transparent 70%),
+      radial-gradient(30% 30% at 90% 10%, rgba(255,255,255,0.04),  transparent 70%);
+    filter: blur(12px);
+    z-index: -1;
+    animation: meshDrift 18s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+  @keyframes meshDrift {
+    0%   { transform: translate(-3%, -2%) scale(1.00) rotate(0deg); }
+    33%  { transform: translate( 3%, -1%) scale(1.06) rotate(2deg); }
+    66%  { transform: translate( 1%,  3%) scale(1.04) rotate(-1deg); }
+    100% { transform: translate(-2%,  2%) scale(1.08) rotate(1deg); }
+  }
+  .math .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .math .title {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--ink-faint);
+    text-transform: uppercase;
+  }
+  .math .toggle {
+    font-size: 10px;
+    color: var(--ink-faint);
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: inherit;
+    padding: 0;
+    letter-spacing: 0.1em;
+  }
+  .math .toggle:hover { color: var(--accent); }
+  .math pre {
+    margin: 0 0 8px;
+    font-family: inherit;
+    font-size: 10.5px;
+    color: var(--ink);
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+  .math .note {
+    font-size: 10px;
+    color: var(--ink-dim);
+    line-height: 1.55;
+  }
+  .math .note b { color: var(--ink); font-weight: 500; }
+  .math.collapsed .body { display: none; }
+  .math.collapsed { padding: 10px 14px; }
+
+  .hint {
+    right: 18px;
+    bottom: 18px;
+    text-align: right;
+    color: var(--ink-faint);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    line-height: 1.7;
+    text-transform: uppercase;
+  }
+  .hint .row { display: flex; gap: 10px; justify-content: flex-end; align-items: center; }
+  .hint .dot {
+    width: 6px; height: 6px; border-radius: 999px;
+    background: var(--accent);
+    box-shadow: 0 0 12px var(--accent);
+    animation: pulse 2.4s infinite ease-in-out;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  /* corner crosshairs */
+  .cross {
+    position: fixed;
+    width: 14px;
+    height: 14px;
+    border: 1px solid var(--rule);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .cross.tl { top: 12px; left: 12px; border-right: none; border-bottom: none; }
+  .cross.tr { top: 12px; right: 12px; border-left: none; border-bottom: none; }
+  .cross.bl { bottom: 12px; left: 12px; border-right: none; border-top: none; }
+  .cross.br { bottom: 12px; right: 12px; border-left: none; border-top: none; }
+
+  @media (max-width: 720px) {
+    .id .name { font-size: 12px; }
+    .id .subtitle { display: none; }
+    .fps .num { font-size: 22px; }
+    .math { max-width: calc(100vw - 36px); font-size: 10px; }
+    .math pre { font-size: 9.5px; }
+    .hint { display: none; }
+  }
+</style>
+</head>
+<body style="background-color: rgb(0, 0, 0)">
+
+<canvas id="stage" aria-label="Stellar vortex shader wallpaper"></canvas>
+
+<div class="cross tl"></div>
+<div class="cross tr"></div>
+<div class="cross bl"></div>
+<div class="cross br"></div>
+
+<div class="hud id">
+  <div class="tag">Wallpaper · 04 / 05</div>
+  <div class="name">Stellar Vortex</div>
+  <div class="subtitle">differential rotation · Keplerian shear</div>
+</div>
+
+<div class="hud fps" id="fps" data-band="high">
+  <div class="num" id="fps-num">––</div>
+  <div class="label">frames / sec</div>
+  <div class="meta" id="fps-meta">– ms · dpr –</div>
+</div>
+
+<div class="hud math" id="math">
+  <div class="head">
+    <span class="title">Driving function</span>
+    <button class="toggle" id="math-toggle" aria-label="collapse math card">[ – ]</button>
+  </div>
+  <div class="body">
+<pre>E_perm ← E_perm + 0.35       (per click, never decays)
+E_tran ← E_tran + 0.7        (transient, γ = 1.5)
+E      =  tanh(E_perm · 0.22) · 4   +  E_tran
+ω(r)   = (0.55 + 0.30·E) + 1.0/(r + 0.2)
+θ′     = θ + ω(r) · t  +  0.4·E
+ρ(p)   = fbm( R(θ′) · p · 3 )
+bg     = lerp(∈0, ∈grey, y) + 0.022·fbm(·)   (monochrome)
+rim    = vec3(0.055 + 0.06·fbm(p·0.42 + t))   (mesh, was indigo)</pre>
+    <div class="note">
+      Energy is split into <b>two accumulators</b>: a <b>permanent baseline</b>
+      that <b>never decays</b> (each click ratchets it up), and a fast
+      <b>transient</b> for the per-tap kick. The permanent term is
+      <b>tanh-squashed</b> so the visual saturates gracefully past ~30
+      clicks rather than blowing out. Effectively: <b>clicks can only ever
+      make the vortex bigger</b>. Cursor is a directional light: <b>p̂ · m̂</b>
+      brightens the hemisphere facing the pointer. Background is a
+      near-black <b>luminance gradient</b> with a slow large-scale fBM
+      shimmer so empty frames still breathe.
+    </div>
+  </div>
+</div>
+
+<div class="hud hint">
+  <div class="row"><span class="dot"></span><span>Move cursor — directional light · Click — add energy</span></div>
+  <div class="row" id="hint-iters">fbm octaves · –</div>
+  <div class="row" id="hint-clicks">clicks · <span id="c-val">0</span></div>
+  <div class="row" id="hint-energy">energy · <span id="e-val">0.00</span></div>
+</div>
+
+<script>
+(() => {
+  const canvas = document.getElementById('stage');
+  const fpsEl  = document.getElementById('fps');
+  const fpsNum = document.getElementById('fps-num');
+  const fpsMeta= document.getElementById('fps-meta');
+  const mathEl = document.getElementById('math');
+  const mathTog= document.getElementById('math-toggle');
+  const hintItr= document.getElementById('hint-iters');
+
+  mathTog.addEventListener('click', () => {
+    const collapsed = mathEl.classList.toggle('collapsed');
+    mathTog.textContent = collapsed ? '[ + ]' : '[ – ]';
+  });
+
+  const gl = canvas.getContext('webgl2', {
+    antialias: true,
+    premultipliedAlpha: false,
+    powerPreference: 'high-performance',
+  });
+  if (!gl) {
+    document.body.innerHTML = '<div style="padding:40px;color:#ffe7c4;font-family:monospace">WebGL2 not supported in this browser.</div>';
+    return;
+  }
+
+  const isCoarse = matchMedia('(pointer: coarse)').matches || matchMedia('(max-width: 720px)').matches;
+  const OCTAVES  = isCoarse ? 4 : 6;
+  const MAX_DPR  = isCoarse ? 1.5 : 1.75;
+  hintItr.textContent = `fbm octaves · ${OCTAVES}`;
+
+  const VERT = `#version 300 es
+in vec2 a_pos;
+void main(){ gl_Position = vec4(a_pos, 0.0, 1.0); }`;
+
+  const FRAG = `#version 300 es
+precision highp float;
+uniform vec2  u_res;
+uniform float u_time;
+uniform vec2  u_smoothMouse;
+uniform float u_clickTime;
+uniform float u_energy;         // accumulating click energy, never subtracts
+uniform vec3  u_hotCore;        // amber
+out vec4 outColor;
+
+float hash21(vec2 p){
+  p = fract(p * vec2(123.34, 456.21));
+  p += dot(p, p + 45.32);
+  return fract(p.x * p.y);
+}
+float vnoise(vec2 p){
+  vec2 i = floor(p);
+  vec2 f = fract(p);
+  vec2 u = f*f*(3.0 - 2.0*f);
+  float a = hash21(i);
+  float b = hash21(i + vec2(1.0, 0.0));
+  float c = hash21(i + vec2(0.0, 1.0));
+  float d = hash21(i + vec2(1.0, 1.0));
+  return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+}
+float fbm(vec2 p){
+  float v = 0.0, a = 0.5;
+  for (int i = 0; i < ${OCTAVES}; i++){
+    v += a * vnoise(p);
+    p = p * 2.02 + vec2(11.7, 7.3);
+    a *= 0.5;
+  }
+  return v;
+}
+
+void main(){
+  vec2 p = (gl_FragCoord.xy * 2.0 - u_res) / u_res.y;
+  vec2 m = (u_smoothMouse * 2.0 - 1.0) * vec2(u_res.x / u_res.y, 1.0);
+  vec2 uv = gl_FragCoord.xy / u_res;
+
+  // polar — vortex anchored at screen centre
+  float r  = length(p);
+  float th = atan(p.y, p.x);
+
+  // Keplerian shear, baseline already lively; E shifts baseline up
+  float E = u_energy;
+  float omega = (0.55 + 0.30 * E) + 1.0 / (r + 0.2);
+  float thp = th + omega * u_time + 0.4 * E;
+
+  // rotate the local frame and sample fBM
+  float s = sin(thp), co = cos(thp);
+  mat2 R = mat2(co, -s, s, co);
+  vec2 sampled = R * p * 3.0 + vec2(0.0, u_time * 0.04);
+  float rho = fbm(sampled);
+
+  // radial luminosity profile — bright core, falling outward
+  float core  = exp(-r * 1.9);
+  float halo  = exp(-r * 0.6);
+  float armsK = 1.0 + 0.45 * E;
+  float arms  = smoothstep(0.22, 0.82, rho) * exp(-r * 0.9) * armsK;
+
+  // ─── background: black with a faint luminance gradient + alive shimmer (no hue)
+  vec3 bgTop = vec3(0.050);
+  vec3 bgBot = vec3(0.004);
+  vec3 bg    = mix(bgBot, bgTop, smoothstep(0.0, 1.0, uv.y));
+  float life = fbm(p * 0.55 + vec2(u_time * 0.04, -u_time * 0.03));
+  bg += vec3(0.022) * (life - 0.5);
+  // tiny edge vignette pulled into the gradient so corners feel deeper
+  bg *= mix(0.65, 1.0, smoothstep(1.9, 0.2, r));
+
+  vec3 col = bg;
+
+  // monochrome "mesh" — replaces the old indigo rim. Slow large-scale fBM drift,
+  // dark gray only — no hue. Adds shading texture without colour.
+  float meshT = fbm(p * 0.42 + vec2(u_time * 0.05, -u_time * 0.03));
+  vec3 mono   = vec3(0.055 + 0.060 * meshT);   // ~vec3(0.055..0.115), no chroma
+
+  col += u_hotCore * (core * 1.6 + arms * 1.1);
+  col += mono      * (halo * 0.55 + arms * 0.4);
+
+  // bright stellar nucleus
+  col += vec3(1.0, 0.93, 0.78) * exp(-r * 7.0) * (0.9 + 0.4 * E);
+
+  // outer dust — monochrome wash (was indigo)
+  float dust = fbm(p * 0.7 + u_time * 0.03);
+  col += mono * 0.42 * smoothstep(0.4, 0.9, dust) * exp(-r * 0.35);
+
+  // micro-stars (point-like sparks)
+  float spark = pow(hash21(floor(p * 600.0)), 60.0);
+  col += vec3(0.9, 0.85, 1.0) * spark * 0.6;
+
+  // ─── cursor as directional light
+  float mLen = length(m);
+  vec2  mDir = m / max(mLen, 1e-4);
+  vec2  pDir = p / max(r, 1e-4);
+  float side = dot(pDir, mDir);                 // -1..+1
+  float lit  = max(side, 0.0);
+  float lit2 = lit * lit;
+  float mag  = smoothstep(0.0, 0.7, mLen);
+
+  col += u_hotCore * lit2 * mag * (0.55 * exp(-r * 0.45) + 0.25 * arms);
+  col += mono      * max(-side, 0.0) * mag * 0.55 * exp(-r * 0.55);
+
+  // specular streak pointing toward cursor
+  float beam = pow(lit, 14.0) * mag * exp(-r * 0.6);
+  col += vec3(1.0, 0.92, 0.78) * beam * 0.45;
+
+  // click flash (still useful as a per-tap spark, scales with energy)
+  col += u_hotCore * exp(-u_clickTime * 1.8) * exp(-r * 1.4) * (0.35 + 0.25 * min(E, 2.0));
+
+  // ─── Reinhard-variant tonemap: 1 − e^(−1.5·col)
+  col = vec3(1.0) - exp(-1.5 * col);
+
+  // sRGB-ish gamma
+  col = pow(col, vec3(1.0/2.2));
+
+  // soft vignette
+  col *= mix(0.78, 1.0, smoothstep(1.9, 0.2, length(p)));
+
+  outColor = vec4(col, 1.0);
+}`;
+
+  function compile(type, src){
+    const sh = gl.createShader(type);
+    gl.shaderSource(sh, src);
+    gl.compileShader(sh);
+    if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+      console.error(gl.getShaderInfoLog(sh));
+      throw new Error('shader compile failed');
+    }
+    return sh;
+  }
+
+  const prog = gl.createProgram();
+  gl.attachShader(prog, compile(gl.VERTEX_SHADER,   VERT));
+  gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FRAG));
+  gl.linkProgram(prog);
+  if (!gl.getProgramParameter(prog, gl.LINK_STATUS)){
+    console.error(gl.getProgramInfoLog(prog));
+    return;
+  }
+
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+  const aPos = gl.getAttribLocation(prog, 'a_pos');
+  gl.enableVertexAttribArray(aPos);
+  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+  const U = {
+    res:         gl.getUniformLocation(prog, 'u_res'),
+    time:        gl.getUniformLocation(prog, 'u_time'),
+    smoothMouse: gl.getUniformLocation(prog, 'u_smoothMouse'),
+    clickTime:   gl.getUniformLocation(prog, 'u_clickTime'),
+    energy:      gl.getUniformLocation(prog, 'u_energy'),
+    hotCore:     gl.getUniformLocation(prog, 'u_hotCore'),
+  };
+
+  // palette — amber hot core only (rim is now a procedural monochrome mesh)
+  const HOT_CORE = [1.00, 0.74, 0.34];   // ≈ oklch(0.95 0.18 60) amber
+
+  const mouse       = [0.5, 0.5];
+  const smoothMouse = [0.5, 0.5];
+  let   clickAt     = -1000;
+  let   energyPerm  = 0.0;            // permanent baseline — NEVER decays
+  let   energyTran  = 0.0;            // transient kick per click, fast decay
+  let   clickCount  = 0;              // total clicks since load
+  let   lastTick    = performance.now() / 1000;
+  const eValEl      = document.getElementById('e-val');
+  const cValEl      = document.getElementById('c-val');
+  const start       = performance.now() / 1000;
+
+  const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
+  function resize(){
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    canvas.width  = Math.max(1, Math.floor(w * dpr));
+    canvas.height = Math.max(1, Math.floor(h * dpr));
+    gl.viewport(0, 0, canvas.width, canvas.height);
+  }
+  resize();
+  new ResizeObserver(resize).observe(canvas);
+  window.addEventListener('orientationchange', resize);
+
+  function setMouseFromEvent(e){
+    const r = canvas.getBoundingClientRect();
+    mouse[0] =       (e.clientX - r.left) / r.width;
+    mouse[1] = 1.0 - (e.clientY - r.top)  / r.height;
+  }
+  window.addEventListener('pointermove', setMouseFromEvent, { passive: true });
+  window.addEventListener('pointerdown', e => {
+    setMouseFromEvent(e);
+    clickAt = performance.now() / 1000;
+    energyPerm += 0.35;               // permanent ratchet — never decays
+    energyTran += 0.7;                // tactile kick on top
+    clickCount += 1;
+    cValEl.textContent = clickCount;
+  }, { passive: true });
+
+  // ─── FPS ───
+  let frames = 0;
+  let lastSample = performance.now();
+  let lastFrame  = performance.now();
+  let frameMsAvg = 16.7;
+
+  function tickFPS(now){
+    const dt = now - lastFrame;
+    lastFrame = now;
+    frameMsAvg += (dt - frameMsAvg) * 0.08;
+    frames++;
+    if (now - lastSample >= 250){
+      const fps = Math.round(frames * 1000 / (now - lastSample));
+      fpsNum.textContent = fps;
+      fpsMeta.textContent = `${frameMsAvg.toFixed(1)} ms · dpr ${dpr.toFixed(2)}`;
+      fpsEl.dataset.band = fps >= 55 ? 'high' : (fps >= 30 ? 'mid' : 'low');
+      frames = 0;
+      lastSample = now;
+    }
+  }
+
+  function render(){
+    const now = performance.now() / 1000;
+    const dt  = Math.min(0.1, now - lastTick);
+    lastTick = now;
+
+    smoothMouse[0] += (mouse[0] - smoothMouse[0]) * 0.12;
+    smoothMouse[1] += (mouse[1] - smoothMouse[1]) * 0.12;
+
+    // only the transient decays
+    energyTran *= Math.exp(-1.5 * dt);
+
+    // composite: tanh-squashed permanent + raw transient
+    const E = Math.tanh(energyPerm * 0.22) * 4.0 + energyTran;
+    eValEl.textContent = E.toFixed(2);
+
+    gl.useProgram(prog);
+    gl.uniform2f(U.res, canvas.width, canvas.height);
+    gl.uniform1f(U.time, now - start);
+    gl.uniform2f(U.smoothMouse, smoothMouse[0], smoothMouse[1]);
+    gl.uniform1f(U.clickTime, Math.max(0, now - clickAt));
+    gl.uniform1f(U.energy, E);
+    gl.uniform3f(U.hotCore, HOT_CORE[0], HOT_CORE[1], HOT_CORE[2]);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+    tickFPS(performance.now());
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+})();
+</script>
+</body>
+</html>
