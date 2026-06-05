@@ -8,12 +8,27 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Geist:ital,wght@0,100..900;1,100..900&family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet" />
 <style>
+  :root {
+    --color-bg:        #338163;
+    --color-brown:     #338163;
+    --color-cream:     #F4DEA9;
+    --color-beige:     rgba(244, 222, 169, 0.7);
+    --color-beige-solid: rgb(244, 222, 169);
+    --gold-glow:       #E8C879;
+  }
+
   *, *::before, *::after { box-sizing: border-box; }
-  html, body {
+  html {
     margin: 0;
     height: 100%;
-    background: #07050d;
-    overflow: hidden;
+    background: var(--color-bg);
+    scroll-behavior: auto;
+  }
+  body {
+    margin: 0;
+    min-height: 100%;
+    background: var(--color-bg);
+    overflow-x: hidden;
   }
   canvas#stage {
     position: fixed;
@@ -39,10 +54,11 @@
     align-items: center;
     justify-content: space-between;
     padding: 8px;
-    background: rgba(208, 203, 182, 0.7);
+    background: var(--color-beige);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-radius: 999px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
   }
 
   .nav-logo {
@@ -72,7 +88,7 @@
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #5B4425;
+    color: var(--color-brown);
     text-decoration: none;
     transition: color 0.2s;
   }
@@ -89,8 +105,8 @@
     padding: 9px 22px;
     border-radius: 999px;
     white-space: nowrap;
-    background: #5B4425;
-    color: #F4DEA9;
+    background: var(--color-brown);
+    color: var(--color-cream);
     transition: opacity 0.2s;
   }
   .nav-cta:hover { opacity: 0.8; }
@@ -128,10 +144,11 @@
     margin: 0 auto;
     width: calc(100% - 48px);
     max-width: 900px;
-    background: rgba(208, 203, 182, 0.95);
+    background: rgba(244, 222, 169, 0.95);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-radius: 20px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
     padding: 16px 24px;
     flex-direction: column;
     gap: 16px;
@@ -144,7 +161,7 @@
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #5B4425;
+    color: var(--color-brown);
     text-decoration: none;
     transition: color 0.2s;
   }
@@ -157,7 +174,7 @@
 
   /* hero blur — 80 % of viewport height */
   .bg-blur {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
@@ -170,7 +187,7 @@
 
   /* hero card — 80 % of viewport height */
   .card {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
@@ -192,7 +209,7 @@
     margin: 0;
     color: #000;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-    font-size: 39px;
+    font-size: clamp(28px, 4vw, 50px);
     font-weight: 700;
     line-height: 1.2;
     letter-spacing: -0.02em;
@@ -219,21 +236,21 @@
 
   .cta-row button {
     font-family: "Geist", sans-serif;
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 700;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     border: none;
     cursor: pointer;
-    padding: 9px 22px;
+    padding: 15px 32px;
     border-radius: 999px;
     white-space: nowrap;
     transition: opacity 0.2s;
   }
   .cta-row button:hover { opacity: 0.8; }
 
-  .cta-primary  { background: #5B4425; color: #F4DEA9; }
-  .cta-secondary { background: #F4DEA9; color: #5B4425; }
+  .cta-primary  { background: var(--color-brown); color: var(--color-cream); }
+  .cta-secondary { background: var(--color-cream); color: var(--color-brown); }
 
   .calm-down {
     position: absolute;
@@ -245,7 +262,7 @@
     align-items: center;
     gap: 0px;
     cursor: pointer;
-    color: #5B4425;
+    color: var(--color-brown);
     opacity: 0.3;
     transition: opacity 0.4s;
     user-select: none;
@@ -261,12 +278,701 @@
     letter-spacing: 0.14em;
     white-space: nowrap;
   }
+
+  /* ── FEATURES SECTION ─────────────────────────────────────────────────────── */
+  .features {
+    position: relative;
+    background: var(--color-cream);
+    padding: clamp(80px, 12vh, 160px) 24px clamp(100px, 14vh, 180px);
+  }
+  .features__head {
+    max-width: 1640px;
+    margin: 0 auto clamp(48px, 7vh, 84px);
+    text-align: center;
+  }
+  .features__eyebrow {
+    font-family: "Geist", sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--color-brown);
+  }
+  .features__title {
+    margin-top: 18px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: clamp(28px, 4vw, 50px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    color: #2a1410;
+  }
+  .features__title .muted { color: var(--color-brown); }
+
+  .cards {
+    max-width: 1640px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+  }
+
+  .card-feature {
+    position: relative;
+    min-height: 380px;
+    border-radius: 24px;
+    background: #FBF3DA;
+    --mx: -200px;
+    --my: -200px;
+    --glow: 0;
+    isolation: isolate;
+    overflow: hidden;
+    box-shadow: 0 10px 30px -20px rgba(129, 51, 51, 0.35);
+    opacity: 0;
+    transform: translateY(28px);
+    transition: transform 0.55s cubic-bezier(.2,.7,.2,1), box-shadow 0.45s ease, opacity 0.6s cubic-bezier(0.37, 0, 0.63, 1);
+    will-change: transform;
+  }
+  .card-feature::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: linear-gradient(180deg, rgba(129,51,51,0.22), rgba(129,51,51,0.08));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .card-feature__border {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: radial-gradient(
+      280px circle at var(--mx) var(--my),
+      var(--color-brown) 0%,
+      var(--gold-glow) 30%,
+      #C99A4E 52%,
+      transparent 74%
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: var(--glow);
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 4;
+  }
+  .card-feature__glow {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      460px circle at var(--mx) var(--my),
+      rgba(232, 200, 121, 0.55) 0%,
+      rgba(201, 154, 78, 0.30) 30%,
+      rgba(129, 51, 51, 0.16) 52%,
+      transparent 72%
+    );
+    opacity: var(--glow);
+    transition: opacity 0.45s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .card-feature__bg {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background:
+      radial-gradient(120% 100% at 50% 0%, rgba(255,251,238,0.9), transparent 55%),
+      #FBF3DA;
+    z-index: 1;
+  }
+  .card-feature__content {
+    position: relative;
+    z-index: 5;
+    height: 100%;
+    padding: 32px 30px 34px;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-feature__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .card-feature__icon {
+    width: 75px;
+    height: 75px;
+    display: block;
+    border-radius: 14px;
+    overflow: hidden;
+    flex: none;
+  }
+  .card-feature__icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .card-feature__num {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: rgba(51, 129, 99, 0.4);
+    transition: color 0.4s ease;
+    font-family: "Geist", sans-serif;
+  }
+  .cards.is-hovering .card-feature:hover .card-feature__num { color: rgba(51, 129, 99, 0.85); }
+  .card-feature__text { margin-top: auto; }
+  .card-feature__problem {
+    font-size: 22px;
+    line-height: 1.15;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #2a1410;
+    text-wrap: balance;
+    font-family: "Geist", sans-serif;
+  }
+  .card-feature__solution {
+    margin-top: 12px;
+    display: flex;
+    gap: 9px;
+    font-size: 14.5px;
+    line-height: 1.5;
+    font-weight: 500;
+    color: rgba(51, 129, 99, 0.82);
+    text-wrap: pretty;
+    font-family: "Geist", sans-serif;
+  }
+  .card-feature__solution .arrow {
+    flex: none;
+    color: var(--color-brown);
+    font-weight: 700;
+    transform: translateY(1px);
+  }
+
+  .cards.is-hovering .card-feature { transform: scale(0.992); }
+  .cards.is-hovering .card-feature:hover {
+    transform: translateY(-6px) scale(1.012);
+    box-shadow: 0 26px 60px -26px rgba(129, 51, 51, 0.5);
+  }
+  .card-feature.is-visible { opacity: 1; transform: translateY(0); }
+  #cards .card-feature:nth-child(2) { transition-delay: 80ms; }
+  #cards .card-feature:nth-child(3) { transition-delay: 160ms; }
+  #cards .card-feature:nth-child(4) { transition-delay: 240ms; }
+
+  @media (max-width: 1080px) {
+    .cards { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 680px) {
+    .cards { grid-template-columns: 1fr; gap: 18px; }
+    .card-feature { min-height: 240px; }
+  }
+
+  /* ── FLOW SECTION ─────────────────────────────────────────────────────────── */
+  .flow {
+    position: relative;
+    background: #FEF5E1;
+    padding: clamp(80px, 12vh, 160px) 24px clamp(100px, 14vh, 180px);
+  }
+  .flow__head {
+    max-width: 1640px;
+    margin: 0 auto clamp(48px, 7vh, 80px);
+    text-align: center;
+  }
+  .flow__eyebrow {
+    font-family: "Geist", sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--color-brown);
+  }
+  .flow__title {
+    margin-top: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: clamp(28px, 4vw, 50px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    color: var(--color-brown);
+  }
+  .flow__cards {
+    max-width: 1640px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: start;
+    gap: 26px;
+  }
+  .fcard {
+    position: relative;
+    border-radius: 28px;
+    background: var(--color-brown);
+    --mx: -200px;
+    --my: -200px;
+    --glow: 0;
+    isolation: isolate;
+    overflow: hidden;
+    box-shadow: 0 22px 50px -30px rgba(129, 51, 51, 0.6);
+    opacity: 0;
+    transform: translateY(28px);
+    transition: transform 0.55s cubic-bezier(.2,.7,.2,1), box-shadow 0.45s ease, opacity 0.6s cubic-bezier(0.37, 0, 0.63, 1);
+    will-change: transform;
+  }
+  .fcard__border {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: radial-gradient(
+      300px circle at var(--mx) var(--my),
+      #681826 0%, #5A2323 30%, #681826 52%, transparent 74%
+    );
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: var(--glow);
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 4;
+  }
+  .fcard__glow {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(
+      520px circle at var(--mx) var(--my),
+      rgba(104, 24, 38, 0.45) 0%, rgba(90, 35, 35, 0.28) 30%,
+      rgba(104, 24, 38, 0.10) 55%, transparent 72%
+    );
+    opacity: var(--glow);
+    transition: opacity 0.45s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .flow__cards.is-hovering .fcard { transform: scale(0.99); }
+  .flow__cards.is-hovering .fcard:hover {
+    transform: translateY(-8px) scale(1.012);
+    box-shadow: 0 36px 70px -34px rgba(129, 51, 51, 0.75);
+  }
+  .fcard.is-visible { opacity: 1; transform: translateY(0); }
+  .fcard.is-visible.is-active { transform: translateY(-8px); }
+  #flowCards .fcard:nth-child(2) { transition-delay: 110ms; }
+  #flowCards .fcard:nth-child(3) { transition-delay: 220ms; }
+  .fcard__ring {
+    position: absolute;
+    inset: -40%;
+    z-index: 1;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg,
+      transparent 0deg, rgba(104, 24, 38, 0.0) 40deg,
+      #5A2323 90deg, #681826 130deg,
+      rgba(104, 24, 38, 0.0) 200deg, transparent 360deg);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    animation: fcard-ringspin 6s linear infinite;
+    pointer-events: none;
+    will-change: transform;
+  }
+  @keyframes fcard-ringspin { to { transform: rotate(360deg); } }
+  .fcard__sheen {
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    border-radius: inherit;
+    background: linear-gradient(115deg,
+      transparent 30%, rgba(104, 24, 38, 0.30) 47%,
+      rgba(104, 24, 38, 0.55) 50%, rgba(104, 24, 38, 0.30) 53%, transparent 70%);
+    background-size: 250% 100%;
+    background-position: 140% 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .flow__cards.is-hovering .fcard:hover .fcard__ring,
+  .fcard.is-active .fcard__ring { opacity: 0.9; }
+  @keyframes fcard-sheen {
+    0%   { background-position: 140% 0; }
+    100% { background-position: -90% 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fcard__ring { animation: none; }
+  }
+  .fcard__inner {
+    position: relative;
+    z-index: 5;
+    height: 100%;
+    padding: 30px 30px 34px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .fcard__step {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--color-cream);
+  }
+  .fcard__num {
+    flex: none;
+    width: 44px; height: 44px;
+    display: grid; place-items: center;
+    border-radius: 999px;
+    border: 1.5px solid rgba(244, 222, 169, 0.45);
+    font-size: 15px; font-weight: 700; letter-spacing: 0.02em;
+    font-family: "Geist", sans-serif;
+  }
+  .fcard__steplabel {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+    opacity: 0.7;
+    font-family: "Geist", sans-serif;
+  }
+  .fcard__media {
+    width: 100%;
+    aspect-ratio: 3 / 2;
+    border-radius: 18px;
+    overflow: hidden;
+    background: transparent;
+  }
+  .fcard__media img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  .fcard__caption {
+    font-size: clamp(19px, 1.4vw, 23px);
+    line-height: 1.22;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--color-cream);
+    text-wrap: balance;
+    font-family: "Geist", sans-serif;
+  }
+  @media (max-width: 1080px) {
+    .flow__cards { grid-template-columns: 1fr; max-width: 560px; }
+  }
+  @media (max-width: 680px) {
+    .fcard.is-visible.is-active { transform: translateY(-6px); }
+  }
+
+  /* ── SUBMIT SECTION ───────────────────────────────────────────────────────── */
+  .submit {
+    position: relative;
+    z-index: 1;
+    background: #338163;
+    padding: clamp(80px, 12vh, 160px) 24px clamp(100px, 14vh, 180px);
+  }
+  .submit__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(28px, 4.2vw, 30px);
+    align-items: center;
+  }
+  .submit__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .submit__ph-horse-bg {
+    position: absolute;
+    top: -18px;
+    left: -18px;
+    width: 58%;
+    filter: blur(10px);
+    opacity: 0.45;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+  .submit__ph-card {
+    position: relative;
+    width: 100%;
+    max-width: 380px;
+    background: rgba(255,255,255,0.07);
+    border: 1.5px solid rgba(244, 222, 169, 0.18);
+    border-radius: 24px;
+    padding: 28px 28px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    overflow: visible;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    transition: background 0.4s ease, border-color 0.4s ease;
+    z-index: 1;
+  }
+  .submit__ph-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(ellipse at 28% 55%, rgba(244,222,169,0.13) 0%, transparent 68%);
+    opacity: 0;
+    transition: opacity 0.45s ease;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .submit__ph-card:hover::after { opacity: 1; }
+  .submit__ph-card:hover { border-color: rgba(244, 222, 169, 0.32); }
+  .submit__ph-horse {
+    position: absolute;
+    top: -22px;
+    left: -12px;
+    width: 55%;
+    z-index: 3;
+    pointer-events: none;
+    user-select: none;
+  }
+  .submit__ph-top { display: flex; align-items: flex-start; justify-content: flex-end; }
+  .submit__ph-line { height: 10px; border-radius: 6px; background: rgba(244, 222, 169, 0.22); }
+  .submit__ph-line--name  { width: 60%; }
+  .submit__ph-line--handle { width: 40%; }
+  .submit__ph-badge {
+    flex: none;
+    font-family: "Geist", sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #338163;
+    background: #F4DEA9;
+    border-radius: 999px;
+    padding: 4px 12px;
+  }
+  .submit__ph-bars { display: flex; flex-direction: column; gap: 10px; }
+  .submit__ph-bar { height: 10px; border-radius: 6px; background: rgba(244, 222, 169, 0.18); }
+  .submit__ph-stat-row {
+    display: flex;
+    border-top: 1px solid rgba(244, 222, 169, 0.14);
+    padding-top: 20px;
+  }
+  .submit__ph-stat { flex: 1; text-align: center; }
+  .submit__ph-stat + .submit__ph-stat { border-left: 1px solid rgba(244, 222, 169, 0.14); }
+  .submit__ph-stat-val {
+    font-family: "Geist", sans-serif;
+    font-size: 20px; font-weight: 700;
+    color: #F4DEA9; letter-spacing: -0.02em;
+  }
+  .submit__ph-stat-lbl {
+    margin-top: 4px;
+    font-family: "Geist", sans-serif;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+    color: rgba(244, 222, 169, 0.5);
+  }
+  .submit__eyebrow {
+    font-family: "Geist", sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(244, 222, 169, 0.6);
+    margin-bottom: 18px;
+  }
+  .submit__title {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: clamp(28px, 4vw, 50px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    color: #F4DEA9;
+    margin-bottom: 20px;
+  }
+  .submit__sub {
+    font-family: "Geist", sans-serif;
+    font-size: 16px; line-height: 1.6; font-weight: 400;
+    color: rgba(255,255,255,0.72);
+    margin-bottom: 32px;
+    max-width: 480px;
+  }
+  .submit__open-btn {
+    font-family: "Geist", sans-serif;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #338163;
+    background: #F4DEA9;
+    border: none;
+    border-radius: 999px;
+    padding: 15px 32px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    display: inline-block;
+  }
+  .submit__open-btn:hover { opacity: 0.85; }
+
+  /* ---- modal ---- */
+  .submit-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .submit-modal.is-open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .submit-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(7, 5, 13, 0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  .submit-modal__box {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 480px;
+    background: #338163;
+    border: 1.5px solid rgba(244, 222, 169, 0.2);
+    border-radius: 28px;
+    padding: 40px 36px 36px;
+    transform: translateY(18px) scale(0.97);
+    transition: transform 0.35s cubic-bezier(.2,.7,.2,1);
+  }
+  .submit-modal.is-open .submit-modal__box {
+    transform: translateY(0) scale(1);
+  }
+  .submit-modal__close {
+    position: absolute;
+    top: 18px; right: 18px;
+    width: 36px; height: 36px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    background: rgba(244, 222, 169, 0.12);
+    border: none;
+    cursor: pointer;
+    color: rgba(244, 222, 169, 0.7);
+    font-size: 18px;
+    line-height: 1;
+    transition: background 0.2s, color 0.2s;
+  }
+  .submit-modal__close:hover {
+    background: rgba(244, 222, 169, 0.22);
+    color: #F4DEA9;
+  }
+  .submit-modal__title {
+    font-family: "Geist", sans-serif;
+    font-size: 20px; font-weight: 700; letter-spacing: -0.01em;
+    color: #F4DEA9;
+    margin-bottom: 24px;
+  }
+  .submit__form { display: flex; flex-direction: column; gap: 16px; }
+  .submit__field { display: flex; flex-direction: column; gap: 7px; }
+  .submit__label {
+    font-family: "Geist", sans-serif;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
+    color: rgba(244, 222, 169, 0.75);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .submit__optional {
+    font-size: 11px; font-weight: 400; letter-spacing: 0.04em;
+    color: rgba(244, 222, 169, 0.4);
+  }
+  .submit__input {
+    font-family: "Geist", sans-serif;
+    font-size: 15px; font-weight: 400;
+    color: #fff;
+    background: rgba(255,255,255,0.08);
+    border: 1.5px solid rgba(244, 222, 169, 0.2);
+    border-radius: 12px;
+    padding: 13px 16px;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    width: 100%;
+  }
+  .submit__input::placeholder { color: rgba(255,255,255,0.3); }
+  .submit__input:focus {
+    border-color: rgba(244, 222, 169, 0.55);
+    background: rgba(255,255,255,0.12);
+  }
+  .submit__btn {
+    margin-top: 8px;
+    font-family: "Geist", sans-serif;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    color: #338163;
+    background: #F4DEA9;
+    border: none;
+    border-radius: 999px;
+    padding: 15px 32px;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: opacity 0.2s;
+  }
+  .submit__btn:hover { opacity: 0.85; }
+  .submit__fine {
+    font-family: "Geist", sans-serif;
+    font-size: 12px; font-weight: 400;
+    color: rgba(255,255,255,0.35);
+  }
+  @media (max-width: 860px) {
+    .submit__inner { grid-template-columns: 1fr; }
+    .submit__placeholder { display: none; }
+  }
+
+  /* ── FOOTER ───────────────────────────────────────────────────────────────── */
+  .footer {
+    background: #F4DEA9;
+    padding: 28px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .footer__links {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .footer__links a {
+    font-family: "Geist", sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-brown);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .footer__links a:hover { opacity: 0.6; }
+  .footer__right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .footer__year {
+    font-family: "Geist", sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--color-brown);
+    opacity: 0.5;
+  }
+  @media (max-width: 600px) {
+    .footer { flex-direction: column; align-items: flex-start; padding: 28px 24px; }
+    .footer__right { align-self: flex-end; }
+  }
+
+  /* ── APPEAR ANIMATIONS ────────────────────────────────────────────────────── */
+  .anim {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.65s cubic-bezier(0.37, 0, 0.63, 1),
+                transform 0.65s cubic-bezier(0.37, 0, 0.63, 1);
+  }
+  .anim.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .submit__content.anim { transition-delay: 100ms; }
 </style>
 </head>
 <body>
 
 <canvas id="stage" aria-label="Stellar vortex background"></canvas>
-<div class="bg-blur"></div>
 
 <nav class="topnav">
   <span class="nav-logo">
@@ -274,10 +980,10 @@
     ALPHA TRACK
   </span>
   <div class="nav-links">
-    <a href="#">Solution</a>
-    <a href="#">Our DB</a>
-    <a href="#">For Influencers</a>
-    <a href="#">Docs</a>
+    <a href="#solution">Solution</a>
+    <a href="#our-db">Our DB</a>
+    <a href="#influencers">For Influencers</a>
+    <a href="#docs">Docs</a>
   </div>
   <button class="nav-cta">Start Bot</button>
   <button class="nav-burger" id="nav-burger" aria-label="Menu">
@@ -286,14 +992,16 @@
 </nav>
 
 <div class="nav-mobile-menu" id="nav-mobile-menu">
-  <a href="#">Solution</a>
-  <a href="#">Our DB</a>
-  <a href="#">For Influencers</a>
-  <a href="#">Docs</a>
+  <a href="#solution">Solution</a>
+  <a href="#our-db">Our DB</a>
+  <a href="#influencers">For Influencers</a>
+  <a href="#docs">Docs</a>
 </div>
 
+<div style="position: relative; height: 80vh;">
+<div class="bg-blur"></div>
 <div class="card">
-  <h1 id="headline">Crypto is a mess.<br><span style="color:#5B4425">Use a correct lens.</span></h1>
+  <h1 id="headline">Crypto is a mess.<br><span style="color:var(--color-brown)">Use a correct lens.</span></h1>
   <p class="subhead" id="subhead">AI reads thousands of crypto channels so you don't have to.</p>
   <div class="cta-row">
     <button class="cta-primary">Start for Free</button>
@@ -301,9 +1009,9 @@
   </div>
 
   <button class="calm-down" id="calm-down">
-    <img src="/hero_lion.png" height="48" alt="lion" />
-    <span class="calm-down-text">CLICK TO CALM DOWN</span>
+    <img src="/hero_lion.png" height="62" alt="lion" />
   </button>
+</div>
 </div>
 
 <script>
@@ -331,5 +1039,424 @@
 </script>
 
 <script type="module" src="/src/main.ts"></script>
+
+<!-- BLOCK 2: Problem + Solution -->
+<section class="features" id="solution">
+  <div class="features__head anim">
+    <div class="features__eyebrow">The System</div>
+    <h2 class="features__title">Four lenses on the noise.<br><span class="muted">One clear signal.</span></h2>
+  </div>
+
+  <div class="cards" id="cards">
+    <article class="card-feature" tabindex="0">
+      <div class="card-feature__bg"></div>
+      <div class="card-feature__glow"></div>
+      <div class="card-feature__border"></div>
+      <div class="card-feature__content">
+        <div class="card-feature__top">
+          <div class="card-feature__icon"><img src="/cards_b2c_solution/01.png" alt="" /></div>
+          <span class="card-feature__num">01</span>
+        </div>
+        <div class="card-feature__text">
+          <h2 class="card-feature__problem">Insiders move before you do</h2>
+          <p class="card-feature__solution"><span class="arrow">&rarr;</span><span>Live Polymarket &amp; Hyperliquid stats surface what the smart money is actually doing.</span></p>
+        </div>
+      </div>
+    </article>
+    <article class="card-feature" tabindex="0">
+      <div class="card-feature__bg"></div>
+      <div class="card-feature__glow"></div>
+      <div class="card-feature__border"></div>
+      <div class="card-feature__content">
+        <div class="card-feature__top">
+          <div class="card-feature__icon"><img src="/cards_b2c_solution/02.png" alt="" /></div>
+          <span class="card-feature__num">02</span>
+        </div>
+        <div class="card-feature__text">
+          <h2 class="card-feature__problem">Too many influencers to follow</h2>
+          <p class="card-feature__solution"><span class="arrow">&rarr;</span><span>Read every voice that matters at once, in one clean feed.</span></p>
+        </div>
+      </div>
+    </article>
+    <article class="card-feature" tabindex="0">
+      <div class="card-feature__bg"></div>
+      <div class="card-feature__glow"></div>
+      <div class="card-feature__border"></div>
+      <div class="card-feature__content">
+        <div class="card-feature__top">
+          <div class="card-feature__icon"><img src="/cards_b2c_solution/03.png" alt="" /></div>
+          <span class="card-feature__num">03</span>
+        </div>
+        <div class="card-feature__text">
+          <h2 class="card-feature__problem">Chats are noisy and unreadable</h2>
+          <p class="card-feature__solution"><span class="arrow">&rarr;</span><span>We scrape and summarize the chatter, so only the important signal reaches you.</span></p>
+        </div>
+      </div>
+    </article>
+    <article class="card-feature" tabindex="0">
+      <div class="card-feature__bg"></div>
+      <div class="card-feature__glow"></div>
+      <div class="card-feature__border"></div>
+      <div class="card-feature__content">
+        <div class="card-feature__top">
+          <div class="card-feature__icon"><img src="/cards_b2c_solution/04.png" alt="" /></div>
+          <span class="card-feature__num">04</span>
+        </div>
+        <div class="card-feature__text">
+          <h2 class="card-feature__problem">Research a project, fast</h2>
+          <p class="card-feature__solution"><span class="arrow">&rarr;</span><span>Hype, investment and the latest Twitter activity for any project &mdash; in seconds.</span></p>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<script>
+(function () {
+  const grid = document.getElementById('cards');
+  const cards = Array.from(grid.querySelectorAll('.card-feature'));
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+
+  function setCard(card, mx, my, glow) {
+    card.style.setProperty('--mx', mx + 'px');
+    card.style.setProperty('--my', my + 'px');
+    card.style.setProperty('--glow', glow);
+  }
+
+  function onMove(e) {
+    grid.classList.add('is-hovering');
+    cards.forEach(card => {
+      const r = card.getBoundingClientRect();
+      const mx = e.clientX - r.left;
+      const my = e.clientY - r.top;
+      const dx = Math.max(r.left - e.clientX, 0, e.clientX - r.right);
+      const dy = Math.max(r.top - e.clientY, 0, e.clientY - r.bottom);
+      const glow = Math.max(0, 1 - Math.hypot(dx, dy) / 360);
+      setCard(card, mx, my, glow);
+    });
+  }
+  function onLeave() {
+    grid.classList.remove('is-hovering');
+    cards.forEach(card => card.style.setProperty('--glow', 0));
+  }
+
+  function onScroll() {
+    const vc = window.innerHeight / 2;
+    cards.forEach(card => {
+      const r = card.getBoundingClientRect();
+      const d = Math.abs((r.top + r.height / 2) - vc);
+      const glow = Math.max(0, 1 - d / (window.innerHeight * 0.55));
+      const prog = Math.min(1, Math.max(0, (vc - r.top) / r.height));
+      setCard(card, r.width * (0.25 + prog * 0.5), r.height * prog, glow * 0.9);
+    });
+  }
+
+  function setup() {
+    if (fine.matches) {
+      window.removeEventListener('scroll', onScroll);
+      grid.addEventListener('pointermove', onMove);
+      grid.addEventListener('pointerleave', onLeave);
+    } else {
+      grid.removeEventListener('pointermove', onMove);
+      grid.removeEventListener('pointerleave', onLeave);
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }
+  }
+  (fine.addEventListener ? fine.addEventListener('change', setup) : fine.addListener(setup));
+  setup();
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => en.target.classList.toggle('is-visible', en.isIntersecting));
+  }, { threshold: 0.18 });
+  cards.forEach(c => io.observe(c));
+})();
+</script>
+
+<!-- BLOCK 3: How it works / Flow -->
+<section class="flow" id="our-db">
+  <div class="flow__head anim">
+    <div class="flow__eyebrow">How it works</div>
+    <h2 class="flow__title">Flow is simple af</h2>
+  </div>
+
+  <div class="flow__cards" id="flowCards">
+    <article class="fcard" tabindex="0">
+      <div class="fcard__ring"></div>
+      <div class="fcard__glow"></div>
+      <div class="fcard__border"></div>
+      <div class="fcard__sheen"></div>
+      <div class="fcard__inner">
+        <div class="fcard__step">
+          <span class="fcard__num">01</span>
+          <span class="fcard__steplabel">Step One</span>
+        </div>
+        <div class="fcard__media">
+          <img src="/cards_b2c_messages/01.png" alt="Add a project you follow" />
+        </div>
+        <h2 class="fcard__caption">Add a project you follow, hold, or just want to watch.</h2>
+      </div>
+    </article>
+
+    <article class="fcard" tabindex="0">
+      <div class="fcard__ring"></div>
+      <div class="fcard__glow"></div>
+      <div class="fcard__border"></div>
+      <div class="fcard__sheen"></div>
+      <div class="fcard__inner">
+        <div class="fcard__step">
+          <span class="fcard__num">02</span>
+          <span class="fcard__steplabel">Step Two</span>
+        </div>
+        <div class="fcard__media">
+          <img src="/cards_b2c_messages/02.png" alt="Mapped to every channel about that project" />
+        </div>
+        <h2 class="fcard__caption">We map it to every message about that project in our DB.</h2>
+      </div>
+    </article>
+
+    <article class="fcard" tabindex="0">
+      <div class="fcard__ring"></div>
+      <div class="fcard__glow"></div>
+      <div class="fcard__border"></div>
+      <div class="fcard__sheen"></div>
+      <div class="fcard__inner">
+        <div class="fcard__step">
+          <span class="fcard__num">03</span>
+          <span class="fcard__steplabel">Step Three</span>
+        </div>
+        <div class="fcard__media">
+          <img src="/cards_b2c_messages/03.png" alt="Stats at once — make your own decision" />
+        </div>
+        <h2 class="fcard__caption">See all the stats at once &mdash; and make your own decision.</h2>
+      </div>
+    </article>
+  </div>
+</section>
+
+<script>
+(function () {
+  const grid = document.getElementById('flowCards');
+  const cards = Array.from(grid.querySelectorAll('.fcard'));
+  const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+
+  function setCard(card, mx, my, glow) {
+    card.style.setProperty('--mx', mx + 'px');
+    card.style.setProperty('--my', my + 'px');
+    card.style.setProperty('--glow', glow);
+  }
+
+  function onMove(e) {
+    grid.classList.add('is-hovering');
+    cards.forEach(card => {
+      const r = card.getBoundingClientRect();
+      const mx = e.clientX - r.left;
+      const my = e.clientY - r.top;
+      const dx = Math.max(r.left - e.clientX, 0, e.clientX - r.right);
+      const dy = Math.max(r.top - e.clientY, 0, e.clientY - r.bottom);
+      const glow = Math.max(0, 1 - Math.hypot(dx, dy) / 380);
+      setCard(card, mx, my, glow);
+    });
+  }
+  function onLeave() {
+    grid.classList.remove('is-hovering');
+    cards.forEach(card => card.style.setProperty('--glow', 0));
+  }
+
+  function onScroll() {
+    const vc = window.innerHeight / 2;
+    cards.forEach(card => {
+      const r = card.getBoundingClientRect();
+      const d = Math.abs((r.top + r.height / 2) - vc);
+      const glow = Math.max(0, 1 - d / (window.innerHeight * 0.55));
+      const prog = Math.min(1, Math.max(0, (vc - r.top) / r.height));
+      setCard(card, r.width * (0.25 + prog * 0.5), r.height * prog, glow);
+      card.classList.toggle('is-active', glow > 0.62);
+    });
+  }
+
+  function bindDesktop() {
+    grid.addEventListener('pointermove', onMove);
+    grid.addEventListener('pointerleave', onLeave);
+  }
+  function unbindDesktop() {
+    grid.removeEventListener('pointermove', onMove);
+    grid.removeEventListener('pointerleave', onLeave);
+  }
+
+  function setup() {
+    if (fine.matches) {
+      window.removeEventListener('scroll', onScroll);
+      cards.forEach(c => c.classList.remove('is-active'));
+      bindDesktop();
+    } else {
+      unbindDesktop();
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }
+  }
+  (fine.addEventListener ? fine.addEventListener('change', setup) : fine.addListener(setup));
+  setup();
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => en.target.classList.toggle('is-visible', en.isIntersecting));
+  }, { threshold: 0.18 });
+  cards.forEach(c => io.observe(c));
+})();
+</script>
+
+<!-- BLOCK 4: Influencer / Channel submission -->
+<section class="submit" id="influencers">
+  <div class="submit__inner">
+
+    <div class="submit__placeholder anim" aria-hidden="true">
+      <img class="submit__ph-horse-bg" src="/images_influencers/horseAT.png" alt="" />
+      <div class="submit__ph-card">
+        <img class="submit__ph-horse" src="/images_influencers/horseAT.png" alt="" />
+        <div class="submit__ph-top">
+          <div class="submit__ph-badge">Listed</div>
+        </div>
+        <div class="submit__ph-bars">
+          <div class="submit__ph-bar" style="width:82%"></div>
+          <div class="submit__ph-bar" style="width:61%"></div>
+          <div class="submit__ph-bar" style="width:74%"></div>
+          <div class="submit__ph-bar" style="width:48%"></div>
+        </div>
+        <div class="submit__ph-stat-row">
+          <div class="submit__ph-stat">
+            <div class="submit__ph-stat-val">12.4k</div>
+            <div class="submit__ph-stat-lbl">Subscribers</div>
+          </div>
+          <div class="submit__ph-stat">
+            <div class="submit__ph-stat-val">94%</div>
+            <div class="submit__ph-stat-lbl">Signal score</div>
+          </div>
+          <div class="submit__ph-stat">
+            <div class="submit__ph-stat-val">DeFi</div>
+            <div class="submit__ph-stat-lbl">Niche</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="submit__content anim">
+      <div class="submit__eyebrow">For Influencers</div>
+      <h2 class="submit__title">Your audience is already here. <span style="color:#fff">Are you?</span></h2>
+      <p class="submit__sub">We track the channels that move markets. If you're building a real audience in crypto, get listed — and get in front of the people who actually pay attention.</p>
+
+      <button class="submit__open-btn" id="submitOpen">Submit your channel</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- MODAL -->
+<div class="submit-modal" id="submitModal" role="dialog" aria-modal="true" aria-label="Submit your channel">
+  <div class="submit-modal__backdrop" id="submitBackdrop"></div>
+  <div class="submit-modal__box">
+    <button class="submit-modal__close" id="submitClose" aria-label="Close">&#x2715;</button>
+    <div class="submit-modal__title">Submit your channel</div>
+    <form class="submit__form" onsubmit="return false;">
+      <div class="submit__field">
+        <label class="submit__label">Telegram channel link</label>
+        <input class="submit__input" type="text" placeholder="t.me/yourchannel" autocomplete="off" />
+      </div>
+      <div class="submit__field">
+        <label class="submit__label">Your Telegram handle</label>
+        <input class="submit__input" type="text" placeholder="@yourhandle" autocomplete="off" />
+      </div>
+      <div class="submit__field">
+        <label class="submit__label">Niche / focus <span class="submit__optional">optional</span></label>
+        <input class="submit__input" type="text" placeholder="DeFi / NFTs / Macro / Altcoins / etc." autocomplete="off" />
+      </div>
+      <button class="submit__btn" type="submit">Submit your channel</button>
+      <p class="submit__fine">We review manually. No bots, no spam channels.</p>
+    </form>
+  </div>
+</div>
+
+<script>
+  (function () {
+    const modal = document.getElementById('submitModal');
+    const openBtn = document.getElementById('submitOpen');
+    const closeBtn = document.getElementById('submitClose');
+    const backdrop = document.getElementById('submitBackdrop');
+
+    function openModal() {
+      modal.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+      modal.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    openBtn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    backdrop.addEventListener('click', closeModal);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeModal();
+    });
+  })();
+</script>
+
+<footer class="footer" id="docs">
+  <nav class="footer__links">
+    <a href="#solution">Solution</a>
+    <a href="#our-db">Our DB</a>
+    <a href="#influencers">For Influencers</a>
+    <a href="#docs">Docs</a>
+  </nav>
+  <div class="footer__right">
+    <span class="footer__year">© 2025</span>
+    <img src="/at_logo_svg.svg" width="28" height="28" alt="Alpha Track" />
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Appear animation for .anim elements (re-triggers each scroll)
+  const animObserver = new IntersectionObserver((entries) => {
+    entries.forEach(en => en.target.classList.toggle('is-visible', en.isIntersecting));
+  }, { threshold: 0.18 });
+  document.querySelectorAll('.anim').forEach(el => animObserver.observe(el));
+
+  // Custom ease-in-out smooth scroll (900ms — ~50% longer than browser default)
+  function easeInOut(t) {
+    return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+  }
+  function smoothScrollTo(targetEl, duration) {
+    const startY = window.scrollY;
+    const endY = targetEl.getBoundingClientRect().top + window.scrollY;
+    const startTime = performance.now();
+    function step(now) {
+      const p = Math.min((now - startTime) / duration, 1);
+      window.scrollTo(0, startY + (endY - startY) * easeInOut(p));
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  // Intercept all anchor links that target an id on this page
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', function (e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      smoothScrollTo(target, 900);
+    });
+  });
+
+  // Close mobile menu when a nav link is clicked
+  const mobileMenu = document.getElementById('nav-mobile-menu');
+  const burger = document.getElementById('nav-burger');
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      burger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+    });
+  });
+})();
+</script>
 </body>
 </html>
